@@ -1,10 +1,15 @@
-import Link from 'next/link';
+'use client';
+
+import { useRaces } from '@/blocks/races/hooks/use-races';
+import { RacesBlock } from '@/blocks/races/races';
 
 export default function RootPage() {
+  const { liveRaces, completedRaces } = useRaces();
+
   return (
-    <main>
-      <h1>All your races</h1>
-      <Link href="/races/new">Create new race</Link>
-    </main>
+    <RacesBlock
+      liveRaces={liveRaces}
+      completedRaces={completedRaces}
+    />
   );
 }
