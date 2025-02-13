@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { v4 } from 'uuid';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -22,10 +23,18 @@ export const NewRaceForm = ({ onCreateSuccess }) => {
           setStudentName('');
         }}>Add student</Button>
       </div>
-        <Button onClick={() => {
-          localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify([{ students: studentNames.map(name => ({ name })) }]));
-          onCreateSuccess?.();
-        }}>Create race</Button>
+      <Button
+        onClick={() => {
+          const race = {
+            id: v4(),
+            students: studentNames.map(name => ({ name })),
+          };
+          localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify([race]));
+          onCreateSuccess?.(race.id);
+        }}
+      >
+        Create race
+      </Button>
     </div>
   );
 };

@@ -87,4 +87,25 @@ describe('NewRaceForm', () => {
     const data = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY));
     expect(data).toMatchObject([{ students: [{ name: 'Van Halen' }, { name: 'Rhapsody' } ] }]);
   });
+
+  it('should call the onCreateSuccess callback with the uuid of the race and save it in the race', async () => {
+    const onCreateSuccess = jest.fn();
+    render(
+      <NewRaceForm onCreateSuccess={onCreateSuccess}/>
+    );
+
+    const input = screen.getByRole('textbox');
+    const addStudentButton = screen.getByRole('button', { name: 'Add student' });
+
+    await userEvent.type(input, 'Patrick');
+    await userEvent.click(addStudentButton);
+
+    await userEvent.type(input, 'Bob');
+    await userEvent.click(addStudentButton);
+
+    await userEvent.click(screen.getByRole('button', { name: 'Create race' }));
+
+    const data = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY));
+    expect(onCreateSuccess).toHaveBeenCalledWith(data.at(0).id);
+  });
 });
