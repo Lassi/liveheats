@@ -3,7 +3,7 @@ import { v4 } from 'uuid';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { LOCALSTORAGE_KEY } from '@/lib/constants';
+import { createRace } from '@/lib/race-utils';
 
 export const NewRaceForm = ({ onCreateSuccess }) => {
   const [newStudentName, setNewStudentName] = useState('');
@@ -48,13 +48,8 @@ export const NewRaceForm = ({ onCreateSuccess }) => {
       <Button
         disabled={!hasEnoughStudents}
         onClick={() => {
-          const existingRaces = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY)) ?? [];
-          const race = {
-            id: v4(),
-            students: studentNames.map(name => ({ name })),
-          };
-          localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify([...existingRaces, race]));
-          onCreateSuccess?.(race.id);
+          const newRace = createRace(studentNames);
+          onCreateSuccess?.(newRace.id);
         }}
       >
         Create race

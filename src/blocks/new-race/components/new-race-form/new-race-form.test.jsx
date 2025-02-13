@@ -2,9 +2,8 @@ import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { LOCALSTORAGE_KEY } from '@/lib/constants';
-
 import { NewRaceForm } from './new-race-form';
+import { createRace, listRaces } from '@/lib/race-utils';
 
 describe('NewRaceForm', () => {
   beforeAll(() => {
@@ -92,8 +91,8 @@ describe('NewRaceForm', () => {
 
     await userEvent.click(screen.getByRole('button', { name: 'Create race' }));
 
-    const data = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY));
-    expect(data).toMatchObject([{ students: [{ name: 'Van Halen' }, { name: 'Rhapsody' } ] }]);
+    const { liveRaces } = listRaces();
+    expect(liveRaces).toMatchObject([{ students: [{ name: 'Van Halen' }, { name: 'Rhapsody' } ] }]);
   });
 
   it('should call the onCreateSuccess callback with the uuid of the race and save it in the race', async () => {
@@ -113,8 +112,8 @@ describe('NewRaceForm', () => {
 
     await userEvent.click(screen.getByRole('button', { name: 'Create race' }));
 
-    const data = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY));
-    expect(onCreateSuccess).toHaveBeenCalledWith(data.at(0).id);
+    const { liveRaces } = listRaces();
+    expect(onCreateSuccess).toHaveBeenCalledWith(liveRaces.at(0).id);
   });
 
   it('should disable the add student button is the student is already assigned to a lane', async () => {
@@ -148,9 +147,7 @@ describe('NewRaceForm', () => {
   });
 
   it('should append data and not overwrite existing races', async () => {
-    const existingRace = { id: 'my-fantastic-id' };
-
-    localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify([existingRace]));
+    createRace(['Camila', 'Esteban']);
 
     render(
       <NewRaceForm />
@@ -167,7 +164,7 @@ describe('NewRaceForm', () => {
 
     await userEvent.click(screen.getByRole('button', { name: 'Create race' }));
 
-    const data = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY));
-    expect(data).toHaveLength(2);
+    const { liveRaces } = listRaces();
+    expect(liveRaces).toHaveLength(2);
   });
 });

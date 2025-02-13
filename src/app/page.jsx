@@ -1,10 +1,10 @@
 'use client';
 
-import { useRaces } from '@/blocks/races/hooks/use-races';
 import { RacesBlock } from '@/blocks/races/races';
+import { listRaces } from '@/lib/race-utils';
 
 export default function RootPage() {
-  const { liveRaces, completedRaces } = useRaces();
+  const { liveRaces, completedRaces } = listRaces();
 
   return (
     <RacesBlock
