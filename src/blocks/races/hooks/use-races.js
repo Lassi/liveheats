@@ -1,4 +1,4 @@
-export const LOCALSTORAGE_KEY = 'liveheats-races';
+import { LOCALSTORAGE_KEY } from '@/lib/constants';
 
 export const useRaces = () => {
   try {

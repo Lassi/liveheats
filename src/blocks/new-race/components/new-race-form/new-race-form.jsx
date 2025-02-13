@@ -2,24 +2,29 @@ import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { LOCALSTORAGE_KEY } from '@/lib/constants';
 
 export const NewRaceForm = () => {
   const [studentName, setStudentName] = useState('');
-  const [students, setStudents] = useState([]);
+  const [studentNames, setStudentNames] = useState([]);
 
   return (
     <div>
       <ul>
-        {students.map((student) => (
+        {studentNames.map((student) => (
           <li key={student}>{student}</li>
         ))}
       </ul>
       <div className="flex flex-row gap-2">
         <Input type="text" placeholder="Jane Doe" onChange={(event) => setStudentName(event.target.value)} value={studentName} />
         <Button onClick={() => {
-          setStudents((prevStudents) => [...prevStudents, studentName]);
+          setStudentNames((prevStudents) => [...prevStudents, studentName]);
+          setStudentName('');
         }}>Add student</Button>
       </div>
+        <Button onClick={() => {
+          localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify([{ students: studentNames.map(name => ({ name })) }]))
+        }}>Create race</Button>
     </div>
   );
 };

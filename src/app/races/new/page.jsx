@@ -19,7 +19,6 @@ export default function NewRacePage() {
       <main>
         <h1 className="text-4xl">Create a new race</h1>
         <NewRaceBlock />
-        <button onClick={() => router.push('/races/fakeId')}>Create</button>
       </main>
     </>
   );

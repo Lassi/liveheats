@@ -1,6 +1,8 @@
 import { renderHook } from '@testing-library/react';
 
-import { LOCALSTORAGE_KEY, useRaces } from './use-races';
+import { LOCALSTORAGE_KEY } from '@/lib/constants';
+
+import { useRaces } from './use-races';
 
 describe('useRaces', () => {
   beforeAll(() => {
