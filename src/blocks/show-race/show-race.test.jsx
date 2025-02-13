@@ -1,6 +1,5 @@
 import '@testing-library/jest-dom';
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen, within } from '@testing-library/react';
 
 import { ShowRaceBlock } from './show-race';
  
@@ -60,5 +59,19 @@ describe('ShowRaceBlock', () => {
     const students = screen.getAllByRole('listitem');
  
     race.students.forEach(({ name }, index) => expect(students.at(index)).toHaveTextContent(name));
+  });
+
+  it('should render a navbar with a link to the home page', () => {
+    render(
+      <ShowRaceBlock race={{ students: [] }} />
+    );
+
+    const navbar = screen.getByRole('banner');
+
+    expect(navbar).toBeInTheDocument();
+
+    const link = within(navbar).getByRole('link');
+
+    expect(link).toHaveAttribute('href', '/');
   });
 });

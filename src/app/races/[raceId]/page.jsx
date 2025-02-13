@@ -15,9 +15,8 @@ export default function RacePage({ params }) {
   }
 
   return (
-    <main>
-      <h1>Temporary race page</h1>
-      <ShowRaceBlock race={race}/>
-    </main>
+    <ShowRaceBlock
+      race={race}
+    />
   );
 }
