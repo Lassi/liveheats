@@ -7,6 +7,14 @@ import { LOCALSTORAGE_KEY } from '@/lib/constants';
 import { NewRaceForm } from './new-race-form';
 
 describe('NewRaceForm', () => {
+  beforeAll(() => {
+    localStorage.clear();
+  });
+
+  afterEach(() => {
+    localStorage.clear();
+  });
+
   it('should render an input to add a student', () => {
     render(
       <NewRaceForm />
@@ -107,5 +115,59 @@ describe('NewRaceForm', () => {
 
     const data = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY));
     expect(onCreateSuccess).toHaveBeenCalledWith(data.at(0).id);
+  });
+
+  it('should disable the add student button is the student is already assigned to a lane', async () => {
+    render(
+      <NewRaceForm />
+    );
+
+    const input = screen.getByRole('textbox');
+    const addStudentButton = screen.getByRole('button', { name: 'Add student' });
+
+    await userEvent.type(input, 'Tim');
+    await userEvent.click(addStudentButton);
+
+    await userEvent.type(input, 'Tim');
+
+    expect(addStudentButton).toBeDisabled();
+  });
+
+  it('should disable the create race button if there is less than 2 students', async () => {
+    render(
+      <NewRaceForm />
+    );
+
+    const input = screen.getByRole('textbox');
+    const addStudentButton = screen.getByRole('button', { name: 'Add student' });
+
+    await userEvent.type(input, 'Tim');
+    await userEvent.click(addStudentButton);
+
+    expect(screen.getByRole('button', { name: 'Create race' })).toBeDisabled();
+  });
+
+  it('should append data and not overwrite existing races', async () => {
+    const existingRace = { id: 'my-fantastic-id' };
+
+    localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify([existingRace]));
+
+    render(
+      <NewRaceForm />
+    );
+
+    const input = screen.getByRole('textbox');
+    const addStudentButton = screen.getByRole('button', { name: 'Add student' });
+
+    await userEvent.type(input, 'Pam');
+    await userEvent.click(addStudentButton);
+
+    await userEvent.type(input, 'Tam');
+    await userEvent.click(addStudentButton);
+
+    await userEvent.click(screen.getByRole('button', { name: 'Create race' }));
+
+    const data = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY));
+    expect(data).toHaveLength(2);
   });
 });
