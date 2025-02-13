@@ -9,8 +9,8 @@ export default function NewRacePage() {
 
   return (
     <NewRaceBlock
-      onCreateSuccess={() => {
-        router.push('/races/fakeId')
+      onCreateSuccess={(raceId) => {
+        router.push(`/races/${raceId}`);
       }}
     />
   );
