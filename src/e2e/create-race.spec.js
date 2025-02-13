@@ -24,13 +24,9 @@ test('Teacher can create a new race', async ({ page }) => {
   await page.getByRole('button', { name: 'Create' }).click();
 
   // RacePage
-  await page.waitForURL('**/races/fakeId');
+  await page.waitForURL('**/races/*');
 
   expect(page.getByRole('heading', 'Temporary race page')).toBeVisible();
 
-  const studentListItems = page.getByRole('listitem');
-
-  studentListItems.forEach((studentListItem, index) => {
-    expect(studentListItem).toHaveText(studentNames.at(index));
-  });
+  expect(page.getByRole('listitem')).toHaveText(studentNames);
 });
