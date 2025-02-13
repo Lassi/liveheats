@@ -9,6 +9,7 @@ import { NewRaceBlock } from '@/blocks/new-race/new-race';
 
 export default function NewRacePage() {
   const router = useRouter();
+
   return (
     <>
       <Navbar>
@@ -18,7 +19,7 @@ export default function NewRacePage() {
       </Navbar>
       <main>
         <h1 className="text-4xl">Create a new race</h1>
-        <NewRaceBlock />
+        <NewRaceBlock onCreateSuccess={() => router.push('/races/fakeId')}/>
       </main>
     </>
   );

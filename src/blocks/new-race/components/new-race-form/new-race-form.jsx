@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { LOCALSTORAGE_KEY } from '@/lib/constants';
 
-export const NewRaceForm = () => {
+export const NewRaceForm = ({ onCreateSuccess }) => {
   const [studentName, setStudentName] = useState('');
   const [studentNames, setStudentNames] = useState([]);
 
@@ -23,7 +23,8 @@ export const NewRaceForm = () => {
         }}>Add student</Button>
       </div>
         <Button onClick={() => {
-          localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify([{ students: studentNames.map(name => ({ name })) }]))
+          localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify([{ students: studentNames.map(name => ({ name })) }]));
+          onCreateSuccess?.();
         }}>Create race</Button>
     </div>
   );

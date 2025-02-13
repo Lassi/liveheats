@@ -1,7 +1,7 @@
 import { NewRaceForm } from './components/new-race-form/new-race-form';
 
-export const NewRaceBlock = () => {
+export const NewRaceBlock = ({ onCreateSuccess }) => {
   return (
-    <NewRaceForm />
+    <NewRaceForm onCreateSuccess={onCreateSuccess} />
   );
 };
