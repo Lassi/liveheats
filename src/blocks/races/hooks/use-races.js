@@ -6,10 +6,10 @@ export const useRaces = () => {
     const races = Array.isArray(data) ? data : [];
 
     const liveRaces = races.filter((race) => race.students.every(
-      (student) => student.rank === null
+      (student) => student.rank == null
     ));
     const completedRaces = races.filter((race) => race.students.every(
-      (student) => student.rank !== null
+      (student) => student.rank != null
     ));
 
     return { liveRaces, completedRaces };
