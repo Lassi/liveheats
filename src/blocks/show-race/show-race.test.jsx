@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom';
 import { render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import { ShowRaceBlock } from './show-race';
  
@@ -73,5 +74,57 @@ describe('ShowRaceBlock', () => {
     const link = within(navbar).getByRole('link');
 
     expect(link).toHaveAttribute('href', '/');
+  });
+
+  it('should render a button to complete the race', () => {
+    render(
+      <ShowRaceBlock race={{ students: [] }} />
+    );
+
+    const button = screen.getByRole('button', { name: 'Complete race' });
+
+    expect(button).toBeInTheDocument();
+  });
+
+  it('should disable the button to complete the race if the ranking is empty', () => {
+    render(
+      <ShowRaceBlock race={{ students: [] }} />
+    );
+
+    const button = screen.getByRole('button', { name: 'Complete race' });
+
+    expect(button).toBeDisabled();
+  });
+
+  it('should show an error and disable the button to complete the race if the ranking invalid', async () => {
+    const race = {
+      students: [
+        { name: 'Alfred' },
+        { name: 'Sophia' },
+        { name: 'Ron Swanson' },
+      ],
+    };
+    render(
+      <ShowRaceBlock race={race} />
+    );
+
+    const input = screen.getAllByRole('textbox');
+    await userEvent.type(input.at(0), '4');
+
+    const button = screen.getByRole('button', { name: 'Complete race' });
+    const error = screen.getByText(/Error:.*/);
+
+    expect(button).toBeDisabled();
+    expect(error).toBeInTheDocument();
+  });
+
+  it('should not show an error if the ranking is completely empty', () => {
+    render(
+      <ShowRaceBlock race={{ students: [{ name: 'Joris' }, { name: 'Maude' }] }} />
+    );
+
+    const error = screen.queryByText(/Error:.*/);
+
+    expect(error).not.toBeInTheDocument();
   });
 });

@@ -1,5 +1,5 @@
 export const validateRanking = (ranks, numberOfStudents) => {
-  if (ranks.length !== numberOfStudents) {
+  if (ranks.length !== numberOfStudents || ranks.some(rank => rank === '')) {
     return ({
       valid: false,
       error: 'a rank is required for each student',
@@ -24,28 +24,25 @@ export const validateRanking = (ranks, numberOfStudents) => {
     });
   }
 
-  const dedupedRanks = new Set(sortedRanks);
-
-  // If the set has the same size as the array, we don't have a tie
-  if (dedupedRanks.size === sortedRanks.length) {
-    const missingRankIndex = sortedRanks.findIndex((rank, index) => rank !== index + 1);
-
-    if (missingRankIndex !== -1) {
-      return ({
-        valid: false,
-        error: `a rank was skipped: ${missingRankIndex + 1}`,
-      });
-    }
-  }
-
   for (let i = 1; i < sortedRanks.length; i++) {
     const prevRank = sortedRanks.at(i - 1);
     const currRank = sortedRanks.at(i);
-    if (currRank !== i + 1 && currRank !== prevRank) {
-      return ({
-        valid: false,
-        error: `incorrect rank after tie: ${currRank}`,
-      });
+
+    if (currRank !== i + 1) {
+
+      if (currRank > i + 1) {
+        return ({
+          valid: false,
+          error: `a rank was skipped: ${i + 1}`,
+        });
+      }
+
+      if (currRank !== prevRank) {
+        return ({
+          valid: false,
+          error: `incorrect rank after tie: ${currRank}`,
+        });
+      }
     }
   }
 

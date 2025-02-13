@@ -60,9 +60,9 @@ describe('ranking-utils', () => {
 
     it('should validate that all ranks are provided correctly if there is a tie', () => {
       const testCases = [
-        [[1, 1, 4, 5], 'incorrect rank after tie: 4'],
+        [[1, 1, 2, 5], 'incorrect rank after tie: 2'],
         [[1, 2, 2, 3], 'incorrect rank after tie: 3'],
-        [[1, 1, 1, 42], 'incorrect rank after tie: 42'],
+        [[1, 1, 1, 2], 'incorrect rank after tie: 2'],
       ];
 
       for (const [ranks, error] of testCases) {
@@ -86,9 +86,35 @@ describe('ranking-utils', () => {
 
       for (const ranks of testCases) {
         expect(
-          validateRanking(ranks , ranks.length)
+          validateRanking(ranks, ranks.length)
         ).toEqual({
           valid: true,
+        });
+      };
+    });
+
+    it('should treat empty string as missing element and not incorrect values', () => {
+      expect(
+        validateRanking([1, 2, '', 3, 4], 5)
+      ).toEqual({
+        valid: false,
+        error: 'a rank is required for each student',
+      });
+    });
+
+    it('should provide the skipped rank error message for rankings with ties', () => {
+      const testCases = [
+        [[1, 1, 3, 5], 'a rank was skipped: 4'],
+        [[1, 2, 2, 8], 'a rank was skipped: 4'],
+        [[1, 1, 1, 42], 'a rank was skipped: 4'],
+      ];
+
+      for (const [ranks, error] of testCases) {
+        expect(
+          validateRanking(ranks , 4)
+        ).toEqual({
+          valid: false,
+          error,
         });
       };
     });
