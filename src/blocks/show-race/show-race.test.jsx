@@ -3,8 +3,17 @@ import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { ShowRaceBlock } from './show-race';
+import { completeRace, createRace, getRace } from '@/lib/race-utils';
  
 describe('ShowRaceBlock', () => {
+  beforeAll(() => {
+    localStorage.clear();
+  });
+
+  afterEach(() => {
+    localStorage.clear();
+  });
+
   it('should render a list of students', () => {
     const race = { students: new Array(42).fill({}) };
 
@@ -126,5 +135,58 @@ describe('ShowRaceBlock', () => {
     const error = screen.queryByText(/Error:.*/);
 
     expect(error).not.toBeInTheDocument();
+  });
+
+  it('should update the race with the ranks when we click complete race', async () => {
+    const race = createRace(['Natalie', 'Boris', 'Jack']);
+
+    render(
+      <ShowRaceBlock race={race} />
+    );
+
+    const rankInputs = screen.getAllByRole('textbox');
+
+    await userEvent.type(rankInputs.at(0), '3');
+    await userEvent.type(rankInputs.at(1), '1');
+    await userEvent.type(rankInputs.at(2), '2');
+
+    await userEvent.click(screen.getByRole('button', { name: 'Complete race' }));
+
+    expect(getRace(race.id).students).toMatchObject([
+      { name: 'Natalie', rank: 3 },
+      { name: 'Boris', rank: 1 },
+      { name: 'Jack', rank: 2 },
+    ]);
+  });
+
+  it('should not show the inputs on a completed race', () => {
+    const race = createRace(['Benny', 'Astrid', 'Leo']);
+    const completedRace = completeRace(race.id, [1, 3, 1]);
+
+    render(
+      <ShowRaceBlock race={completedRace} />
+    );
+
+    const rankInputs = screen.queryAllByRole('textbox');
+    expect(rankInputs).toHaveLength(0);
+  });
+
+  it('should call the onCompleteSuccess callback on completion', async () => {
+    const race = createRace(['Fran', 'Kimmy', 'James']);
+    const onCompleteSuccess = jest.fn();
+
+    render(
+      <ShowRaceBlock race={race} onCompleteSuccess={onCompleteSuccess} />
+    );
+
+    const rankInputs = screen.getAllByRole('textbox');
+
+    await userEvent.type(rankInputs.at(0), '1');
+    await userEvent.type(rankInputs.at(1), '1');
+    await userEvent.type(rankInputs.at(2), '1');
+
+    await userEvent.click(screen.getByRole('button', { name: 'Complete race' }));
+
+    expect(onCompleteSuccess).toHaveBeenCalled();
   });
 });

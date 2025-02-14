@@ -8,6 +8,8 @@ import {
   completeRace,
   createRace,
   getRace,
+  isCompleted,
+  isLive,
   listRaces,
 } from './race-utils';
 
@@ -160,6 +162,47 @@ describe('race-utils', () => {
         { name: 'Greg', rank: 2 },
         { name: 'Phil', rank: 1 },
       ]);
+    });
+
+    it('should return the updated race', () => {
+      writeData([race1, race2]);
+
+      const completedRace = completeRace(race2.id, [2, 1]);
+
+      expect(completedRace.students).toMatchObject([
+        { name: 'Greg', rank: 2 },
+        { name: 'Phil', rank: 1 },
+      ]);
+    });
+  });
+
+  describe('isCompleted', () => {
+    it('should return false if the race has not been completed', () => {
+      const race = createRace(['Milly', 'Socks']);
+
+      expect(isCompleted(race)).toEqual(false);
+    });
+
+    it('should return true if the race has been completed', () => {
+      const race = createRace(['Milly', 'Socks']);
+      completeRace(race.id, [2, 1]);
+
+      expect(isCompleted(getRace(race.id))).toEqual(true);
+    });
+  });
+
+  describe('isLive', () => {
+    it('should return false if the race has been completed', () => {
+      const race = createRace(['Paloma', 'Kevin']);
+      completeRace(race.id, [1, 2]);
+
+      expect(isLive(getRace(race.id))).toEqual(false);
+    });
+
+    it('should return false if the race has not been completed', () => {
+      const race = createRace(['Paloma', 'Kevin']);
+
+      expect(isLive(race)).toEqual(true);
     });
   });
 });

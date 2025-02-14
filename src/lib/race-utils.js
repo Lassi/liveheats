@@ -21,12 +21,8 @@ export const createRace = (studentNames) => {
 export const listRaces = () => {
   const allRaces = readData();
 
-  const completedRaces = allRaces.filter((race) => race.students.every(
-    (student) => student.rank != null
-  ));
-  const liveRaces = allRaces.filter((race) => race.students.every(
-    (student) => student.rank == null
-  ));
+  const completedRaces = allRaces.filter(isCompleted);
+  const liveRaces = allRaces.filter(isLive);
 
   return ({
     completedRaces, 
@@ -57,4 +53,18 @@ export const completeRace = (raceId, studentRanks) => {
   });
 
   writeData(updatedRaces);
+
+  return updatedRaces.find(race => race.id === raceId);
+};
+
+export const isCompleted = (race) => {
+  return race.students.every(
+    (student) => student.rank != null
+  );
+};
+
+export const isLive = (race) => {
+  return race.students.every(
+    (student) => student.rank == null
+  );
 };
