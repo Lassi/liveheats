@@ -21,7 +21,7 @@ export const RacesBlock = ({ liveRaces, completedRaces }) => {
         </Button>
       </Navbar>
       <main className="px-8 py-4 flex flex-col">
-        <div className="flex flex-col gap-6 md:self-center md:w-2/3 lg:w-1/2">
+        <div className="flex flex-col gap-8 md:self-center md:w-2/3 lg:w-1/2">
           <h1 className="text-4xl">All your races</h1>
           <Tabs defaultValue="live">
             <TabsList className="grid sm:w-1/3 grid-cols-2">

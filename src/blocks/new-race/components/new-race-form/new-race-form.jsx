@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { v4 } from 'uuid';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { createRace } from '@/lib/race-utils';
+
+import { StudentList, StudentListItem } from '../student-list/student-list';
 
 export const NewRaceForm = ({ onCreateSuccess }) => {
   const [newStudentName, setNewStudentName] = useState('');
@@ -17,12 +18,18 @@ export const NewRaceForm = ({ onCreateSuccess }) => {
   const hasEnoughStudents = studentNames.length >= 2;
 
   return (
-    <div>
-      <ul>
-        {studentNames.map((student) => (
-          <li key={student}>{student}</li>
+    <div className="flex flex-col gap-6">
+      <StudentList>
+        {studentNames.map((studentName, index) => (
+          <StudentListItem
+            key={studentName}
+            lane={index + 1}
+            name={studentName}
+          >
+            {studentName}
+          </StudentListItem>
         ))}
-      </ul>
+      </StudentList>
       <div className="flex flex-row gap-2">
         <Input
           type="text"
