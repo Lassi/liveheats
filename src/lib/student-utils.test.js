@@ -21,5 +21,12 @@ describe('student-utils', () => {
     it('should return capitalize letters', () => {
       expect(getInitials('lowercase name')).toEqual('LN');
     });
+
+    it('should return an empty string if provided with a non string', () => {
+      expect(getInitials(4222)).toEqual('');
+      expect(getInitials(undefined)).toEqual('');
+      expect(getInitials(null)).toEqual('');
+      expect(getInitials(NaN)).toEqual('');
+    });
   });
 });

@@ -8,7 +8,7 @@ export const UnrankedStudentList = ({ children }) => {
       <div className="contents">
         <h2 className="font-semibold col-span-1">Lane</h2>
         <h2 className="font-semibold col-span-4">Student</h2>
-        <h2 className="font-semibold col-span-1">Rank</h2>
+        <h2 className="font-semibold col-span-1 text-right">Rank</h2>
       </div>
       <ul className="contents">
         {children}
@@ -17,7 +17,7 @@ export const UnrankedStudentList = ({ children }) => {
   );
 };
 
-export const UnrankedStudentListItem = ({ name, lane, rank, onChangeRank }) => {
+export const UnrankedStudentListItem = ({ name, lane, rank, onChangeRank, isEditable }) => {
   return (
     <li className="contents">
       <div className="contents">
@@ -28,12 +28,16 @@ export const UnrankedStudentListItem = ({ name, lane, rank, onChangeRank }) => {
             </Avatar>
             {name}
           </div>
-          <Input
-            // data-test-id={`${name}-${studentIndex}`}
-            type="text"
-            onChange={onChangeRank}
-            value={rank}
-          />
+          {isEditable ? (
+            <Input
+              // data-test-id={`${name}-${studentIndex}`}
+              type="text"
+              onChange={onChangeRank}
+              value={rank}
+            />
+          ) : (
+            <div className="semibold text-right">{rank}</div>
+          )}
       </div>
     </li>
   );

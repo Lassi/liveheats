@@ -43,7 +43,7 @@ describe('UnrankedStudentListItem', () => {
 
   it('should render an input to provide the rank', () => {
     render(
-      <UnrankedStudentListItem name="Jean" lane={42} />
+      <UnrankedStudentListItem name="Jean" lane={42} isEditable />
     );
  
     const input = screen.getByRole('textbox');
@@ -58,6 +58,7 @@ describe('UnrankedStudentListItem', () => {
         lane={42}
         rank={4}
         onChangeRank={() => {}}
+        isEditable
       />
     );
  
@@ -76,6 +77,7 @@ describe('UnrankedStudentListItem', () => {
         lane={42}
         rank={4}
         onChangeRank={onChangeRank}
+        isEditable
       />
     );
  
@@ -84,6 +86,23 @@ describe('UnrankedStudentListItem', () => {
     await userEvent.type(input, 'hehehe');
 
     expect(onChangeRank).toHaveBeenCalled();
+  });
+
+  it('should render text instead if the input if not editable', async () => {
+    const onChangeRank = jest.fn();
+
+    render(
+      <UnrankedStudentListItem
+        name="Jean"
+        lane={42}
+        rank={4}
+        onChangeRank={onChangeRank}
+      />
+    );
+ 
+    const input = screen.queryByRole('textbox');
+
+    expect(input).not.toBeInTheDocument();
   });
 });
 

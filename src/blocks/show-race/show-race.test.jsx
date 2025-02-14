@@ -189,4 +189,27 @@ describe('ShowRaceBlock', () => {
 
     expect(onCompleteSuccess).toHaveBeenCalled();
   });
+
+  it('should sort the student in rank order when the race is completed', async () => {
+    const studentNames = ['Natalie', 'Boris', 'Jack'];
+    const race = createRace(studentNames);
+
+    render(
+      <ShowRaceBlock race={race} />
+    );
+
+    const rankInputs = screen.getAllByRole('textbox');
+
+    await userEvent.type(rankInputs.at(0), '3');
+    await userEvent.type(rankInputs.at(1), '1');
+    await userEvent.type(rankInputs.at(2), '2');
+
+    await userEvent.click(screen.getByRole('button', { name: 'Complete race' }));
+
+    const students = screen.getAllByRole('listitem');
+
+    for (const [i, student] of students.entries()) {
+      expect(student).toHaveTextContent(studentNames.at(i));
+    }
+  });
 });
