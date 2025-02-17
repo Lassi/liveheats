@@ -55,8 +55,10 @@ Aside from that, here's a quick description of the project's structure:
 
 ## Notes
 
-A couple of thoughts/remarks on this projects:
+A couple of notes/thoughts/remarks on this projects:
 
+- You can open the `whiteboard.excalidraw` file using [Excalidraw](https://excalidraw.com/) if you're curious about the initial thinking process that happened when I read the requirement doc
+- The app is [accessible online](https://liveheats-rouge.vercel.app/)
 - I ran into quite a few issues with playwright which made it hard to write e2e tests properly, especially for the "view race" page. If I had more time I'd have tried to clean up things a bit and refactor the tests to follow the POM pattern and fixtures to make them easier to read/maintain/reuse
 - I tried to TDD everything but as a result of me not practicing this in a looong time, one can see that my approach is subpar and the design suffered. It was an interesting exercise though and brought back cool memories.
 - If I had more time, I'd have added zod and a form library to make things a bit nicer
