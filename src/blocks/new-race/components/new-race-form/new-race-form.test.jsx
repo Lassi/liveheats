@@ -19,7 +19,7 @@ describe('NewRaceForm', () => {
       <NewRaceForm />
     );
 
-    const input = screen.getByRole('textbox');
+    const input = screen.getByRole('textbox', { name: 'New student\'s name' });
 
     expect(input).toBeInTheDocument();
   });
@@ -39,7 +39,7 @@ describe('NewRaceForm', () => {
       <NewRaceForm />
     );
 
-    const input = screen.getByRole('textbox');
+    const input = screen.getByRole('textbox', { name: 'New student\'s name' });
     const button = screen.getByRole('button', { name: 'Add student' });
 
     await userEvent.type(input, 'John Student');
@@ -56,7 +56,7 @@ describe('NewRaceForm', () => {
       <NewRaceForm />
     );
 
-    const input = screen.getByRole('textbox');
+    const input = screen.getByRole('textbox', { name: 'New student\'s name' });
     const button = screen.getByRole('button', { name: 'Add student' });
 
     await userEvent.type(input, 'John Student');
@@ -80,13 +80,16 @@ describe('NewRaceForm', () => {
       <NewRaceForm />
     );
 
-    const input = screen.getByRole('textbox');
+    const raceInput = screen.getByRole('textbox', { name: 'Race\'s name' });
+    const studentInput = screen.getByRole('textbox', { name: 'New student\'s name' });
     const addStudentButton = screen.getByRole('button', { name: 'Add student' });
 
-    await userEvent.type(input, 'Van Halen');
+    await userEvent.type(raceInput, 'Epic race');
+
+    await userEvent.type(studentInput, 'Van Halen');
     await userEvent.click(addStudentButton);
 
-    await userEvent.type(input, 'Rhapsody');
+    await userEvent.type(studentInput, 'Rhapsody');
     await userEvent.click(addStudentButton);
 
     await userEvent.click(screen.getByRole('button', { name: 'Create race' }));
@@ -101,13 +104,16 @@ describe('NewRaceForm', () => {
       <NewRaceForm onCreateSuccess={onCreateSuccess}/>
     );
 
-    const input = screen.getByRole('textbox');
+    const raceInput = screen.getByRole('textbox', { name: 'Race\'s name' });
+    const studentInput = screen.getByRole('textbox', { name: 'New student\'s name' });
     const addStudentButton = screen.getByRole('button', { name: 'Add student' });
 
-    await userEvent.type(input, 'Patrick');
+    await userEvent.type(raceInput, 'Epic race');
+
+    await userEvent.type(studentInput, 'Patrick');
     await userEvent.click(addStudentButton);
 
-    await userEvent.type(input, 'Bob');
+    await userEvent.type(studentInput, 'Bob');
     await userEvent.click(addStudentButton);
 
     await userEvent.click(screen.getByRole('button', { name: 'Create race' }));
@@ -121,13 +127,16 @@ describe('NewRaceForm', () => {
       <NewRaceForm />
     );
 
-    const input = screen.getByRole('textbox');
+    const raceInput = screen.getByRole('textbox', { name: 'Race\'s name' });
+    const studentInput = screen.getByRole('textbox', { name: 'New student\'s name' });
     const addStudentButton = screen.getByRole('button', { name: 'Add student' });
 
-    await userEvent.type(input, 'Tim');
+    await userEvent.type(raceInput, 'Epic race');
+
+    await userEvent.type(studentInput, 'Tim');
     await userEvent.click(addStudentButton);
 
-    await userEvent.type(input, 'Tim');
+    await userEvent.type(studentInput, 'Tim');
 
     expect(addStudentButton).toBeDisabled();
   });
@@ -137,10 +146,13 @@ describe('NewRaceForm', () => {
       <NewRaceForm />
     );
 
-    const input = screen.getByRole('textbox');
+    const raceInput = screen.getByRole('textbox', { name: 'Race\'s name' });
+    const studentInput = screen.getByRole('textbox', { name: 'New student\'s name' });
     const addStudentButton = screen.getByRole('button', { name: 'Add student' });
 
-    await userEvent.type(input, 'Tim');
+    await userEvent.type(raceInput, 'Epic race');
+
+    await userEvent.type(studentInput, 'Tim');
     await userEvent.click(addStudentButton);
 
     expect(screen.getByRole('button', { name: 'Create race' })).toBeDisabled();
@@ -153,18 +165,48 @@ describe('NewRaceForm', () => {
       <NewRaceForm />
     );
 
-    const input = screen.getByRole('textbox');
+    const raceInput = screen.getByRole('textbox', { name: 'Race\'s name' });
+    const studentInput = screen.getByRole('textbox', { name: 'New student\'s name' });
     const addStudentButton = screen.getByRole('button', { name: 'Add student' });
 
-    await userEvent.type(input, 'Pam');
+    await userEvent.type(raceInput, 'Epic race');
+
+    await userEvent.type(studentInput, 'Pam');
     await userEvent.click(addStudentButton);
 
-    await userEvent.type(input, 'Tam');
+    await userEvent.type(studentInput, 'Tam');
     await userEvent.click(addStudentButton);
 
     await userEvent.click(screen.getByRole('button', { name: 'Create race' }));
 
     const { liveRaces } = listRaces();
     expect(liveRaces).toHaveLength(2);
+  });
+
+  it('should render an input to name the race', () => {
+    render(
+      <NewRaceForm />
+    );
+
+    const input = screen.getByRole('textbox', { name: 'Race\'s name' });
+
+    expect(input).toBeInTheDocument();
+  });
+
+  it('should disable the create race button if no name is provided for the race', async () => {
+    render(
+      <NewRaceForm />
+    );
+
+    const input = screen.getByRole('textbox', { name: 'New student\'s name' });
+    const addStudentButton = screen.getByRole('button', { name: 'Add student' });
+
+    await userEvent.type(input, 'Tim');
+    await userEvent.click(addStudentButton);
+
+    await userEvent.type(input, 'Tam');
+    await userEvent.click(addStudentButton);
+
+    expect(screen.getByRole('button', { name: 'Create race' })).toBeDisabled();
   });
 });

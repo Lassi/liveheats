@@ -2,9 +2,10 @@ import { v4 } from 'uuid';
 
 import { readData, writeData } from '@/lib/storage-utils';
 
-export const createRace = (studentNames) => {
+export const createRace = (raceName, studentNames) => {
   const newRace = {
     id: v4(),
+    name: raceName,
     students: studentNames.map((name) => ({
       name,
       rank: null,

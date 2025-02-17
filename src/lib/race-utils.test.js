@@ -24,10 +24,11 @@ describe('race-utils', () => {
 
   describe('createRace', () => {
     it('should create a new race and commit it to storage', () => {
-      createRace(['Mathilda', 'Maria', 'Juan']);
+      createRace('Awesome race', ['Mathilda', 'Maria', 'Juan']);
 
       expect(readData()).toMatchObject([
         {
+          name: 'Awesome race',
           students: [
             { name: 'Mathilda', rank: null },
             { name: 'Maria', rank: null },
@@ -38,11 +39,12 @@ describe('race-utils', () => {
     });
 
     it('should not overwrite existing races', () => {
-      createRace(['Mathilda', 'Maria', 'Juan']);
-      createRace(['Nick', 'Pascal', 'Jane']);
+      createRace('Race 1', ['Mathilda', 'Maria', 'Juan']);
+      createRace('Race 2', ['Nick', 'Pascal', 'Jane']);
 
       expect(readData()).toMatchObject([
         {
+          name: 'Race 1',
           students: [
             { name: 'Mathilda', rank: null },
             { name: 'Maria', rank: null },
@@ -50,6 +52,7 @@ describe('race-utils', () => {
           ],
         },
         {
+          name: 'Race 2',
           students: [
             { name: 'Nick', rank: null },
             { name: 'Pascal', rank: null },
@@ -60,9 +63,10 @@ describe('race-utils', () => {
     });
 
     it('should return the newly created race', () => {
-      const newRace = createRace(['Mathilda', 'Maria', 'Juan']);
+      const newRace = createRace('Cool race', ['Mathilda', 'Maria', 'Juan']);
 
       expect(newRace).toMatchObject({
+        name: 'Cool race',
         students: [
           { name: 'Mathilda', rank: null },
           { name: 'Maria', rank: null },
@@ -178,13 +182,13 @@ describe('race-utils', () => {
 
   describe('isCompleted', () => {
     it('should return false if the race has not been completed', () => {
-      const race = createRace(['Milly', 'Socks']);
+      const race = createRace('Live race', ['Milly', 'Socks']);
 
       expect(isCompleted(race)).toEqual(false);
     });
 
     it('should return true if the race has been completed', () => {
-      const race = createRace(['Milly', 'Socks']);
+      const race = createRace('Completed race', ['Milly', 'Socks']);
       completeRace(race.id, [2, 1]);
 
       expect(isCompleted(getRace(race.id))).toEqual(true);
@@ -193,14 +197,14 @@ describe('race-utils', () => {
 
   describe('isLive', () => {
     it('should return false if the race has been completed', () => {
-      const race = createRace(['Paloma', 'Kevin']);
+      const race = createRace('Completed race', ['Paloma', 'Kevin']);
       completeRace(race.id, [1, 2]);
 
       expect(isLive(getRace(race.id))).toEqual(false);
     });
 
-    it('should return false if the race has not been completed', () => {
-      const race = createRace(['Paloma', 'Kevin']);
+    it('should return true if the race has not been completed', () => {
+      const race = createRace('Live race', ['Paloma', 'Kevin']);
 
       expect(isLive(race)).toEqual(true);
     });
