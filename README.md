@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Liveheats Coding Challenge
 
-## Getting Started
+## Installation
 
-First, run the development server:
+To get started with the project you will need to have:
+
+- a recent version of node (v23.7.0 was used to bootstrap the project)
+- pnpm (v10.4.0 was used to bootstrap the project)
+
+Once those prerequisites are fulfilled, you can install the project's dependencies:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+After that is done, you should be able to run the server and try the app!
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Running the server
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+You can run the development server by using this command:
 
-## Learn More
+```bash
+pnpm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Then open [http://localhost:3000](http://localhost:3000) with your browser to see the app.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Running tests
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+You can run the test via `pnpm`. The following commands are available:
 
-## Deploy on Vercel
+```bash
+# Run all the unit tests
+pnpm run test:unit
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Run all the unit tests in watch mode
+pnpm run test:unit:watch
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Run test for a specific file in watch mode (useful to develop new features)
+pnpm run test:unit:watch path/to/my/file.test.js
+
+# Run all the e2e test
+pnpm run test:e2e
+```
+
+## Folder structure
+
+The app is a Next.js project so it follows their convention for anything that's in the `src/app` directory.
+
+Aside from that, here's a quick description of the project's structure:
+- `src/blocks`: high level components that encapsulate an entire end-user experience (creating a race, viewing a race, ...)
+- `src/components`: low level UI components that are shared across blocks
+- `src/e2e`: end to end tests, powered by playwright
+- `src/lib`: various utilities, used across the entire project
